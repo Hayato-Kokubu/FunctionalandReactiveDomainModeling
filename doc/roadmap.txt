@@ -1,0 +1,46 @@
+roadMap
+
+Ch1. overall discussion
+
+CH2. use Scala  as implementation of functional reactive domain model
+     learn how to combine the OO and FP power of Scala
+
+
+ch3. detailed discussion of algebraic API design
+      personal banking systems
+      some of the lifecycle patterns of domain objects
+      factories -> aggregates -> repositories
+
+ch4. functional design patterns, != OOP
+
+
+ch5. modularizing your domain models
+      bounded context
+      bc が じかんてき・空間的に ぶんりする
+
+ch6. reactive domain models
+     like futures, promises, actors, and reactive streams.
+
+Ch7. reactive streams
+     using Akka Streams  actor の欠点を補う
+
+ch8. domain model persistence
+
+critique of the CRUD-based persistence model
+ the notion of reactive persistence using event-driven techniques.
+ use slick ScalikeJdbc でかけたらいいなぁ
+
+ch9. testing domain models
+       property-based testing
+         ScalaCheck これもScalaTestでやる？
+ch10 まとめ
+
+ch1 => ch10 さらっと というかんじ？
+https://github.com/debasishg/frdomain  exercises のこたえもある
+
+
+quizzes : on the basic concepts
+Quiz Time => Quiz Master’s Response
+
+
+exercises: more serious

@@ -1,0 +1,9 @@
+preface 序文
+
+FP in Scala をバイブルとして持っていた
+
+https://www.manning.com/books/dsls-in-action
+
+反応性が基準
+
+本のもう一つの目的 Fp <-> RP が合わさる

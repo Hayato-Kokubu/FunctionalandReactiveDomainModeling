@@ -1,0 +1,455 @@
+chap1
+
+■ Domain models and domain-driven design
+■ Benefits of functional and pure domain models
+■ Reactive modeling for increased responsiveness
+■ How functional meets reactive
+
+
+カートに全て入れた => 失敗！
+  失敗への対処 がダメ
+
+価格チェック => 遅い！
+  ロードの変化 への反応がダメ
+  クリスマス前 結構アクセス集中
+
+
+banking system < -- > banks, accounts, currency,transactions,reporting
+ reporting も入るのか
+
+ユーザが良い体験をすることを保証すること が モデルのresponsibility
+
+introduces fundamental concepts of
+these two paradigms and
+explains how the combination works together
+
+
+最後に、domain-modeling テクニックを FP RP  両方の言葉で言う
+
+1.1–1.2 Domain models and domain-driven design
+1.3–1.5 Benefits that functional programming brings to your domain model
+• Purity 純粋性
+• Referential transparency 参照透過性
+• Ability of reasoning 理論づけ?
+• Compositionality 構成性？
+
+1.6–1.8 Benefits that reactive programming brings to your domain modelbrings to your domain model
+• Resiliency  弾力生
+• Responsiveness 反応性 // いろんな意味を持ってそう
+• Scalability 可用性
+• Event orientation
+
+1.1 What is a domain model?
+
+
+personal banking のドメイン
+
+withdrew 引き出す
+ATM
+
+deposited    預ける
+bank account 銀行口座
+
+credited  振り込む
+checking account 当座預金口座
+銀行口座　!= 当座預金口座 としている
+
+portfolio statement 運用報告書
+bank
+
+
+entity と 詳細 との関係 を表す青写真
+・ドメインに属するもの
+   exe) bank, accounts, transactin
+
+・ドメイン内のオブジェクト間での相互影響を論ずる振る舞い
+   exe) debit an account, issue a statement to your client
+
+・ドメイン内で使われる言葉
+   exe) “transfer 100 USD from account1 to account2,”
+
+・ドメインが作用するコンテキスト
+  exe) 銀行口座は生きている人or entity (法人とかを表すもの) しか開設できない
+  // 個人銀行 のドメインのビジネスロジック？
+
+
+essential complexities of the system
+
+
+
+個人ローンの申請時の適格性診断 かなりビジネスロジックが入る
+
+関係のないload を行う というのは、偶発的な問題
+
+incidental complexity を減らす のが 効果的なモデル実装
+
+ある種のテクニックで減らせる。
+=> 例 分割できたらしたほうがいい
+
+
+契約・約定  contracts. // moduleかするなら、必ず正確に決めないといけない
+
+
+1.2 Introducing domain-driven design
+　言葉は problem domain <--> solution domain のマッピング
+
+1.2.1 The bounded context
+
+非自明なむずかしさ: 小さいモデルの集合で、それぞれデータとドメインの語彙を持つ // 集約
+新会計の例
+  税 { 課非区分, 税率属性 }
+  // 仕訳の例で考えてみて
+
+bounded context: 小さいモデル　のこと
+一般的にかなり荒い粒度 で、 それだけで機能は完結している
+
+日記帳 元帳 振替伝票 etc...
+
+
+例) banking system
+portfolio management system
+tax and regulatory reports
+deposit management
+
+
+
+複数のBCがある場合、どう通信する？
+bc: 自己完結しているが、連絡は取り合う
+    連絡は最小限にして、疎結合を保つのがいい
+
+1.2.2 The domain model elements
+
+
+
+checking account 当座預金口座
+savings account 普通預金口座
+money market account 金融市場預金口座
+
+transaction  type: debit, credit
+
+これらが、生成 - 使用 - 削除 に関してにている
+
+entities: 一意性を持つもの
+
+account - account number
+        ーdeposit
+        - residental address
+
+value objects : 識別子がないもの immutable
+住所には識別子がない
+  同じ 東京都 〇〇区 △△ xx  でも、それを区別しない
+  => 銀行モデル内には、"東京都 〇〇区 △△ xx" というobject は1つあれば十分
+
+口座を作ると住所変更できない 作り変えないといけない ？
+// 住所 というものは一度変更する => 作り変える必要がある が、
+   口座自体は作り変える必要がない という意味
+
+
+値( 属性 )にのみ注力すればいいのが値object
+  => システム内には1つのみobjectがあればいい
+
+同じ属性であっても、区別する必要があるもの
+  => システム内にはobjectは複数ある
+
+entity内のvalue object を変更してもentityの一意性は失われない
+  // immutable であることは失う <--> 参照透過？
+
+
+value object 自体の値を変更できない
+  変更したらそれは別のものを表すのでは？
+
+住所 "東京都 〇〇区 △△ xx" を "東京都 〇〇区 ▲▲ ❌❌" に変更した！
+
+というよりは、 "東京都 〇〇区 △△ xx" の他にも "東京都 〇〇区 ▲▲ ❌❌"
+という住所があって、そちらにまるっと置き換わった
+と捉えるのが良い？
+
+  value object は定義より、immutable
+
+
+FP では、なるべくentity をimmutableにしたい
+
+
+entity: 変更できない一意な値を持つ
+value object: 変更できない値を持つ
+
+意味的には、entity は変更できるが、なるべく変更しないようにする。
+
+
+可変参照 とは？ 可変である参照型 のobject という意味でいいの？
+
+mutable なコードでは　脆い 、　並列処理が理解しづらい
+
+最初はimmutableではじめて、パフォーマンス上で難があればmutable にする
+
+API上では(メソッド・モジュール上では)immutableであるようにすること！
+参照透過なラッパーメソッドで覆うこと！
+
+Scala のCollectionたちのメソッドは、内部的にはmutable であるが、呼び出すときには
+immutableである
+// 例がほしい　
+
+
+ドメインモデルの本質は要素の振る舞い・相互作用
+振る舞いは、より大きい粒度で。
+振る舞いを、モデルが従う原則的なサービス とみなす
+
+
+bank / ATM
+
+
+account1 <---  transfer ---> account2
+(debit(借) credit(貸))
+
+validation がなされるはず //
+・account is active ?
+・source account has enough money
+・
+
+今回のServiceに入るもの
+account1, account2
+
+
+   service != entity or value object
+=> 粒度の違い
+
+service: 複数のentity が相互作用して
+          法則に従い、システム内で機能している
+
+
+実装の観点では、service は
+関連するentity, value object の集合に
+                作用するメソッドの集合  であり、
+価値があるビジネス上の操作をカプセル化したもの
+
+Figure1.4 account holder はunique?
+
+
+service がservice を持つ？ 入れ子になる? ということはあり得る？
+上の話だと
+(Debit, Credit) |--->Transfer というイメージ
+
+振る舞いの全体の集合をservice として扱う
+
+AccountService ---
+
+BankingService --- transferService
+
+
+DOMAIN ELEMENT SEMANTICS AND BOUNDED CONTEXT
+
+
+Personal banking における
+address は value object
+account は entity
+であったが
+BC によっては異なるかも。
+
+a geocoding service では？
+latitude/longitude で管理する　意識する 必要あり
+かつ、IDが振られる
+
+portfolio reporting では？
+account は、value object となる  << もうちょっと詳しく
+
+
+1.2.3 Lifecycle of a domain object
+
+
+object(value object, or entity) のライフサイクルは以下の３段階があり
+それぞれについて明確に扱う方法を決めないといけない
+
+・生成
+  ex) Bank system: 銀行口座を作るための特別な抽象を作る << なぜ抽象？
+
+・振る舞いへの参加
+  objectが相互作用時に"メモリ上で"どう表現されるか？　<< メモリ上とは？ // value object ? or entity ?
+  複雑なentity は 内部に別のobject を持つ
+  ex) Bank system  account has a bank and account type
+
+・永続 persistence
+  どのようなform で永続化されるか？
+
+evance 本の言葉を使う。
+
+FACTORIES
+  呼ぶ側のコードから、生成部分を抜き出したい。
+
+ex) 銀行口座entity を作る factory => 講座種はパラメータで決められる
+                                => 同じAPIで異なる講座種を作れる
+
+factory は service に属する。 生成 初期化 を司る
+
+factory の責務: validation は最小限？
+
+
+factory を、ドメインを定義するmoduleにいれる流派もある
+　// Scala companion object
+
+
+domain service の一部 : domain service とは？ service と何が違う？
+=> 詳しくはch2 で。
+
+AGGREGATES
+account: 内部に色々なobjectが含まれる
+accountが生成される際には、内部の全てのobject がビジネスルールに従ってないといけない
+  ・account.開設日 > account.閉鎖日 となってはいけない
+  ・holder = null ではいけない
+
+
+// Reference to other objects, such as Address and Bank << address ってどっかで参照してるの？
+   => 外部キーとなる　という意味ではなさそう
+
+  consistency boundary とは？ // 一貫した境界 ということで特に専門的な言葉ではないっぽい？
+
+
+全ての構成を識別したグラフ が aggrigate になる
+
+
+BC内のaggrigateはビジネスルールを満たす以外に、
+モデル内のtransaction boundary とみなされる。
+
+aggregate root は aggregate のobjectの1つ
+graph の保護者のようなもの
+
+別のagrigate との単一作用点となる。 このagrigate と関わるためには root entity を経由しないといけないよ というもの
+
+aggregate root は ２つ目的がある。
+・aggregate 内での一貫した教会・一連の処理(trannsaction)を保証する
+  // その意味だと、仕訳データチェックでは振替伝票を触らせてはいけない気がするんだよなぁ。。。
+
+・実装が外部に漏れることを防ぎ、aggregate 内のすべての処理の窓口となる
+  // 外側からはaggregate の内部がどうなっているかが知られてはいけない
+
+
+パフォのため、root entity が持つ参照はobjectではなくId で持つこともあり。
+
+
+Aggrigate の表現で、case class はいい。
+
+trait を使うのは、mixinによって一緒に使えるから。
+mixin: 既存の複数の抽象を組み合わせて作る小さな抽象
+
+entity: 変更可能である　といったが、case class はimmutable ???
+矛盾はしない。
+
+変更を反映したobjectを新しく作り直す
+
+repositoty
+
+もうつかわないdomain objectを保管 and 復元するしゅだん
+
+
+parking an aggregate in a persistent form
+
+保管されたモデルと in-memory のモデルは全くことなる
+=>
+
+repogitoryの責務:
+DBに保管されたobjectを、DBの情報を流出せずにやりとりする。
+
+repository : DBの性質の知識はない //RDBでもin mmeory でも NoSQLでもいい
+=> 実装時にわかる
+
+aggregate と同様 // <- aggreget も、隠ししている
+
+
+
+
+the three most important types of domain elements
+entities, value objects, and services)
+モデルをformするもの
+
+ three patterns used to manipulate them
+(factories, aggregates, and repositories)
+扱い方のぱたーん
+
+the vocabu- lary of the model　？？？
+
+
+
+
+1.2.4 The ubiquitous language
+
+Bank system
+
+
+ Bank, Account, Customer, and Balance and behaviors like debit and credit resona
+
+
+
+
+function は、
+
+ubiquitous language
+
+
+domain-specific language;
+DSLs in Action (Manning, 2010) 　
+
+
+↑ちょっと理解できてない部分あり
+
+Ch.1.3
+
+  Balance がvarなのが怖い。。。
+
+
+QUIZ TIME 1.1
+どこで辛くなるか？
+
+・並列処理で辛い
+・コードの正当性
+
+
+Java Concurrency in Practice by Brian Goetz //
+並列性の話
+
+mutable ではなく、immutableなobjectを作る直した
+
+
+クラスのコンストラクたはimmutable になっている
+  val の定義にしかた
+  class ないの引数  << ようchekku
+
+debit, credit の実装では transaction をもちろんかんがえないといけない
+
+
+
+純粋関数
+  input のみに依存していて、共有している変数の影響を受けない
+  input が等しければ結果は必ず等しい
+  future が純粋でないのは、Math.random を挟むと示せる
+
+現行: accountが、振る舞いと状態の両方をもっている
+      //  振る舞い: debit, crdit  状態: balance？
+     => 分離したい
+
+
+1.3.1 Ah, the joys of purity
+
+FP では、数学の関数のように、input のみに依存するようにしたい。
+
+QUIZ TIME 1.2 => 1.5
+
+
+list1.4
+  debit がinput のAmount以外に
+  balanceの値に依存している // 別にこれはbalanceがvarだからまずいわけではない
+
+  1.5でも同様では？
+
+
+引数(implicit値でもOK)とobject自身 以外にも
+
+?　そもそも1.4 で a.balanceってアクセスできるの？存在するの？
+
+
+debit credit : service of single account
+               => 個々のobjectが持つべきメソッド
+
+transfer ; service of multi accounts
+
+
+the general principles you need to follow
+when designing functional domain models:

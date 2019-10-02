@@ -1,0 +1,43 @@
+DDD
+FP
+RP reactive principle
+の3つがとってもいい。
+複雑さを管理できる
+
+
+DDD
+  domain が持つ唯一の特性・意味を探し出し、理解する助けになる
+  本当の世界と対応するドメインモデルを、連続的な変化を許しながら拡張できる
+
+
+FP
+  理論と構成
+    stable な値で計算される、再利用可能な純粋関数によって
+    時間・並列性・参照透過なコードによる抽象 を整理するツールセットが得られる
+
+Reactive principles // リアクティブ宣言で定義されるもの
+   マルチプロセッサ・クラウド・モバイル・IoTなど、今まであったものとは分散しているもの
+   を管理するのに役立つ
+
+
+GoF => DDD => FP ・ RP
+
+3つの大胆な点を実践的な方法で紹介してるのがいい
+
+DDD
+bounded contexts,
+domain events,
+
+FP
+functions,
+monads,
+applicatives,
+
+RP
+futures,
+actors,
+streaming,
+ and CQRS
+
+
+RP akka が関連する？
