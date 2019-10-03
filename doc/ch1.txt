@@ -453,3 +453,49 @@ transfer ; service of multi accounts
 
 the general principles you need to follow
 when designing functional domain models:
+
+// 1.3.1 なんか読んだ気がする。。。
+
+・ADT: 代数的データ型中に、immutable な状態をモデルする
+・機能のまとまりのひとつを表現する、モジュール中の関数として振る舞いをモデルする
+・モジュールないの振る舞いはADTで表現される型で作用する
+
+QUIZ TIME 1.3
+正しい？
+OOP では状態と振る舞いをまとめる。
+FP  では状態と振る舞いを分ける。
+
+Listing 1.6:
+
+
+
+
+1.4 Managing side effects
+
+QUIZ TIME 1.6　
+副作用は、
+非自明なドメインモデルをデザインする際に、管理する必要がある大切な要素である。
+
+
+例
+customer 向けに当座預金講座を開設するプロセスをモデルする
+・customer のidenntity を確認
+・必要なチェック => 外部と通信が必要
+
+verifyRecord: 外部との通信が走る => 失敗を考慮しないといけない
+
+例外処理: ドメインロジックとは無関係
+
+
+side effect をどメインモデルと切り離す
+
+
+
+
+
+
+
+
+
+
+
