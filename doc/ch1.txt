@@ -497,6 +497,34 @@ List:1.10 decouple side effect from the domain logic
 
 
 
+1.5 Virtues of pure model elements
+
+equational reasoning: 等式推論
+
+List:1.6:  debit and credit as pure functions
+
+assertion: model の持つproperty: 特性・性質
+
+quiz1.7 のまえの=> ってなに？
+やりたいのはなんだった？
+
+substitution model of evaluation. 手続きの置換えモデル
+
+quiz1.7 等式推論と副作用は両立しない？ => しない。
+
+referentially transparent :参照透過な式
+f(5) がいつでも変わらない結果に評価される
+
+参照透過な式でのみ、等式推論ができる。
+
+■ Referentially transparent expressions are pure.
+■ Referentially transparent expressions make the substitution model work.
+■ The substitution model helps in equational reasoning.
+↑大事！
+
+
+pure functions => Referential transparency =>
+substitutional model  => equational reasoning
 
 
 
