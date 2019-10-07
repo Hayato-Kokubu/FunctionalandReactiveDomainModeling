@@ -587,9 +587,20 @@ elastic にするには、モデルのコンポーネント間の結合を減ら
 event は、ドメインの概念を持つメッセージと思える
 
 
-1.7  では、reactibeモデルの中に
+1.7  では、reactiveモデルの中に
 ドメインイベントがどのようにして振る舞いを形成するかを話す
 
+personal bankingの例
+同期てきに・ブロッキング・実行が連続している場合
+
+銀行が持つ全ての保有に関するportfolioを求める処理
+
+General currency holdings: 一般通過保有
+Equity holdings: 持分保有
+Debt holdings:負債の保有
+Loan information:貸付の保有
+Retirement fund valuation: 退職年金基金の評価
 
 
-
+listing 1.13
+全てval！ -> それぞれ処理を待っている。
