@@ -527,11 +527,68 @@ pure functions => Referential transparency =>
 substitutional model  => equational reasoning
 
 
+1.6 Reactive domain models
+
+latency: 待ち時間、反応時間
+データがおくられてから帰ってくるまでの待ち時間
+
+What makes a model reactive: the four attributes
+・Responsive to user interaction
+・Resilient 耐障害性
+・Elastic 可用性
+・Message-driven
+  => なんでいいんだっけ？: 疎結合・非同期 を実現するため
 
 
+1.6.1 The 3+1 view of the reactive model
+
+Responsive to user interaction の特性として
+・Resilient 耐障害性
+・Elastic 可用性
+・Message-driven
+がある。
+
+quiz 1.8 オンライン本屋がクリスマスの時期にレスポンスが落ちる
+         どのとくせいがまずい？ => scalablity がまずい
 
 
+モデルはかならず壊れる。 大きくなれば特に・
 
+自システム内のfailure 以外に、他システムでの失敗も考慮する
+
+account たちのportfolioの計算時に、一部のaccountにアクセスできないためfail
+=> どうえらーはんどりんgする？
+
+・portfolioを作成するapplicationこーど中でエラーハンドリングを行う
+  => 全てのAPIがback-endにアクセスすることになる<-- ???
+     関心の分離ができてない domain logic と error handling
+     // 元帳まとめ印刷がこんな状態になっているなぁ・・・
+
+・エラーハンドリング専門のmoduleを作る
+
+どの範囲をカバーするかは、applicationによる。
+例の話だと、portfolio にかんするエラーハンドリングを任せれば良い
+
+
+1.6.3 Being elastic and message driven
+
+elastic: load の増減によって、サーバの強さを増減できる
+
+elastic にするには、モデルのコンポーネント間の結合を減らすこと
+実現例) 通信の非同期メッセージ
+
+ノンブロッキングな通信 と 状態を持たないimmutable なメッセージでの通信
+
+非同期だと、 位置的、並列性、言語自体の透明性 をもつ余裕がある
+
+
+アクターモデルを用いる
+
+event は、ドメインの概念を持つメッセージと思える
+
+
+1.7  では、reactibeモデルの中に
+ドメインイベントがどのようにして振る舞いを形成するかを話す
 
 
 
