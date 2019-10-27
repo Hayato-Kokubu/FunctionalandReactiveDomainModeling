@@ -1,4 +1,4 @@
-package domain
+package domain.model
 
 import java.time.LocalDate
 
@@ -7,7 +7,7 @@ trait Account {
   def name: String
   def bank: Bank
   def address: Address
-  def dateOfOpening: LocalDate,
+  def dateOfOpening: LocalDate
   def dateOfClose: Option[LocalDate]
   //..
 }

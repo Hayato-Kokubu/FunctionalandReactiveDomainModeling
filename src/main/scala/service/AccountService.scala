@@ -1,6 +1,6 @@
 package service
 
-import domain.{Account, Amount}
+import domain.model.{Account, Amount}
 
 trait AccountService {
   def transfer(
