@@ -604,3 +604,51 @@ Retirement fund valuation: 退職年金基金の評価
 
 listing 1.13
 全てval！ -> それぞれ処理を待っている。
+
+listing 1.14
+Future にしたことで、val で宣言したらすぐに処理が非同期で開始される。
+fcurr が終わるのを待たずにfeq を別スレッドで実行できる。
+
+promise と Future の関係を知っておいた方が良さげ
+http://dwango.github.io/scala_text_previews/forkme/future-and-promise.html
+ Future/Promiseについて
+Futureは未来の結果を表す型です。
+Promiseは一度だけ、成功あるいは失敗を表す、処理または値を設定することでFutureに変換できる型です。
+
+Future で処理をする =
+
+計算でFuture を返すこと　と
+呼び出しもとthreadに"自分が準備できるときに、結果を利用可能にしろ"なるイベントを渡すことは同じ
+
+1.7.1
+
+イベントを、non-blocking programming model を可能にする小さいメッセージ としてみる
+
+
+
+Debit というイベント
+前提 your account balance has changed
+
+
+DB上のBalanceを変更する
+メモリ上のAggregate を修正
+
+
+DebitOccurred というイベント
+スマホに通知を送る
+
+
+Debit とDebitOccured の違い
+
+作用がある なし
+
+メッセージはイベント実施よりも前 メッセージはイベント実施よりも後
+
+通常は1つのハンドラから生成されうる
+
+失敗する恐れあり 失敗の恐れなし(結果が出たらイベントが走るため)
+
+Debit をcommand , DebitOccureerd をevent といい、区別する。
+
+
+
