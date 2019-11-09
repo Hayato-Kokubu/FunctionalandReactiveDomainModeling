@@ -592,4 +592,60 @@ event は、ドメインの概念を持つメッセージと思える
 
 
 
+1.7.1 2種類
 
+command: debit
+
+event: debitOccurred
+
+共通点 モデルから生成・処理される
+immutable
+
+違い
+
+command
+システムに作用する
+振る舞う前に発生
+様々な種類がある(決まってない)
+エラーとなることがある
+
+event
+振る舞いのあと発生
+定型文
+エラーとはならない
+
+
+
+
+
+1.7.2 Domain events // command, event の違い
+
+
+event: 通知の形式
+
+Bob の住所がA から B に変わることをeventで行う
+
+軽率にcustomer レコードをupdateすると、履歴が残らない
+event にすると　履歴が残る
+
+=> Bank system で履歴をのこしたい？
+=> customer はBank systemでのentity であるから履歴は追跡したい
+
+
+self-tracing models
+  event を変更のtrigger にすることで履歴を追跡できる =
+
+
+1.7.2 で
+Bob の住所がA から B に変わることをeventで行う話で、
+
+ domain events:
+ - 型を持つ
+ - 自分自身の中に、自分が引き起こした変更に関する情報を持つ
+ - consumer によってobserve される
+ - time releavant event の順序 が時間順
+
+
+
+ // JournalEvent など？
+ www.slideshare.net/jboner/event-drivenarchitecture-6097206
