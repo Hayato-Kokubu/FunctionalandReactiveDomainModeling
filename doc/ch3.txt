@@ -1,0 +1,72 @@
+Designing functional domain models
+
+・ドメインモデルのデザインには函数的、代数的方法がある
+・ドメインの代数と実装を分離する
+・APIでの代数的法則を実施する
+・ドメインおbじぇくとのライフサイクルを実装する
+
+
+Summary から読むかな
+
+・moduleが定義する代数の言葉で考える !=  OO system
+・Type-driven composition
+・Separation of concerns 関心の分離
+  the interpreter from the algebra // interpreter という言葉が出てくる
+・Aggregate as the unit of consistency: 集約の存在境界？を代数的法則で実現
+・Functional implementation of domain object patterns
+  lense, reader monad, the smart constructor
+
+three basic lifecycle
+- aggregates // serviceとして使われる時
+- factories  // 生成
+- repositories // 永続化
+
+これらが、FPの基本的なイデオムからどう作られるかをみる
+
+3.1 The algebra of API design
+• Algebraic API design
+• How it differs from OO design
+
+3.2 Defining the algebra of a domain service
+• Designing a specific algebra
+• Composing algebras
+• Laws of algebra
+
+3.3 Lifecycle patterns of domain objects
+• Factories
+• Aggregates
+• Repositories // この辺でやりたいことをやるっぽい
+• FP abstractions (lenses, monads) // ！！
+• Dependency injection in FP // ！！！
+
+
+3.1 The algebra of API design
+OOでは、interface => 個々のクラス という作り方
+
+FP では、operations (ドメインの振る舞い ) を先に作り、後から一般化して moduleにする
+
+module とは？ 関数の集合で、ドメインルールとして不変量を与える
+=> これを代数という
+
+
+3.1.1 Why an algebraic approach
+
+
+APIはユーザに向いていないといけない。
+user がdomainについて初めてしるのは、振る舞いの集合である
+
+
+ユーザが、APIを組み合わせられること
+
+algebraic approach の利点
+
+Loud and clear
+
+Compositionality
+
+Verifiability
+
+
+algebra : 型, 関数, 法則の集まり
+
+implementation はlifecycle の後にくる。
