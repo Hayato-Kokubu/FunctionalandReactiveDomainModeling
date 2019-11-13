@@ -70,3 +70,64 @@ Verifiability
 algebra : 型, 関数, 法則の集まり
 
 implementation はlifecycle の後にくる。
+
+
+3.2 Defining an algebra for a domain service
+
+ // a domain service ってなんだっけ？ ついになるのは app service?
+
+ 口座を作成する
+ // def open(no: String, name: String, openDate: Option[Date]): ???
+    返す型は？
+    普通は Account
+    失敗する処理の場合などは、
+    Option  => 失敗したら none
+    Either  => 失敗したら情報が残る
+    Try     =>
+
+値そのものと、abstraction over the evaluation について
+
+3.2.1 Abstracting over evaluation
+
+values of computation that has been evaluated
+=> 値を組み合わせる際に使う
+
+一連の処理を行う場合に、
+成功・失敗にかかわらず何かしらの値を返して欲しい
+=> for-comprehensions を使う
+
+
+chapter 4 covers monads in detail. // わーい
+
+computations is effectful => 何かしらの文脈に包まれていること
+monad は、effectful computations のための1つの方法である
+
+値そのままを返してしまうと、結合できなくなる。 // あえて包まないといけなくなる
+// ただしそのために含めると、他で使いづらくならない？
+
+
+
+3.2.2 でのopen メソッドで、
+Account そのままを返すよりも、Option, Try などで返した方がいい！
+なぜなら(モナドのような)一連の処理で繋げられないからだ。
+という話について
+
+
+3.2.3 The final algebra of types
+
+open
+close   // for closing an account
+debit   // debiting money from an account
+credit  // for crediting money into an account
+balance // which returns the current balance for the account
+
+
+
+for式: 業務上での完全な実装となっている  // algebra と business operation が対応しているため
+
+
+3.2.4 Laws of the algebra
+
+by using such
+invariants and encoding them as verifiable properties, you can not only document
+domain-model constraints but also execute them every time you build your system
